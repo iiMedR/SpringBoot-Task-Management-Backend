@@ -43,4 +43,21 @@ public class TaskService {
                 Objects.equals(task.getId(), id)
         );
     }
+
+    public Task updateTask(Long id, Task updatedTask) {
+        Task existingTask = getTaskById(id);
+
+        if (existingTask == null) {
+            return null;
+        }
+        if (updatedTask.getTitle() == null || updatedTask.getTitle().isBlank()) {
+            throw new IllegalArgumentException("Title is required");
+        }
+
+        existingTask.setTitle(updatedTask.getTitle());
+        existingTask.setDescription(updatedTask.getDescription());
+        existingTask.setCompleted(updatedTask.isCompleted());
+
+        return existingTask;
+    }
 }

@@ -4,7 +4,7 @@ public class Task {
     private Long id;
     private String title;
     private String description;
-    private Boolean completed;
+    private boolean completed;
 
     public Task() {}
 
@@ -32,7 +32,7 @@ public class Task {
         this.description = description;
     }
 
-    public Boolean isCompleted() {
+    public boolean isCompleted() {
         return completed;
     }
 
