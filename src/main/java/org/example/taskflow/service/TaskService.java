@@ -1,5 +1,6 @@
 package org.example.taskflow.service;
 
+import org.example.taskflow.exception.TaskNotFoundException;
 import org.example.taskflow.model.Task;
 import org.springframework.stereotype.Service;
 
@@ -34,22 +35,17 @@ public class TaskService {
                 return task;
             }
         }
-
-        return null;
+        throw new TaskNotFoundException(id);
     }
 
-    public boolean deleteTaskById(Long id) {
-        return tasks.removeIf(task ->
-                Objects.equals(task.getId(), id)
-        );
+    public void deleteTaskById(Long id) {
+        Task task = getTaskById(id);
+        tasks.remove(task);
     }
 
     public Task updateTask(Long id, Task updatedTask) {
         Task existingTask = getTaskById(id);
 
-        if (existingTask == null) {
-            return null;
-        }
         if (updatedTask.getTitle() == null || updatedTask.getTitle().isBlank()) {
             throw new IllegalArgumentException("Title is required");
         }
@@ -63,13 +59,7 @@ public class TaskService {
 
     public Task markCompleted(Long id) {
         Task task = getTaskById(id);
-
-        if(task == null) {
-            return null;
-        }
-
         task.setCompleted(true);
-
         return task;
     }
 }

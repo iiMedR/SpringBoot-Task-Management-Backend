@@ -27,41 +27,24 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
         Task task = taskService.getTaskById(id);
-
-        if (task == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(task);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
         Task taskUpdated = taskService.updateTask(id, task);
-
-        if (taskUpdated == null) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok(taskUpdated);
     }
 
     @PatchMapping("/{id}/complete")
     public ResponseEntity<Task> completeTask(@PathVariable Long id) {
         Task taskCompleted = taskService.markCompleted(id);
-
-        if(taskCompleted == null) {
-            return ResponseEntity.notFound().build();
-        }
-
         return ResponseEntity.ok(taskCompleted);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        boolean deleted = taskService.deleteTaskById(id);
-
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
-        }
+        taskService.deleteTaskById(id);
         return ResponseEntity.noContent().build();
     }
 }
