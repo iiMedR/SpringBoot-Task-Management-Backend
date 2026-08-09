@@ -43,4 +43,25 @@ public class TaskController {
         }
         return ResponseEntity.ok(taskUpdated);
     }
+
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<Task> completeTask(@PathVariable Long id) {
+        Task taskCompleted = taskService.markCompleted(id);
+
+        if(taskCompleted == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(taskCompleted);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        boolean deleted = taskService.deleteTaskById(id);
+
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
 }

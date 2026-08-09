@@ -60,4 +60,16 @@ public class TaskService {
 
         return existingTask;
     }
+
+    public Task markCompleted(Long id) {
+        Task task = getTaskById(id);
+
+        if(task == null) {
+            return null;
+        }
+
+        task.setCompleted(true);
+
+        return task;
+    }
 }
