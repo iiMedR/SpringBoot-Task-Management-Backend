@@ -1,5 +1,7 @@
 package org.example.taskflow.controller;
 
+import jakarta.validation.Valid;
+import org.example.taskflow.dto.CreateTaskRequest;
 import org.example.taskflow.model.Task;
 import org.example.taskflow.service.TaskService;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,8 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody Task task) {
-        return taskService.createTask(task);
+    public Task createTask(@Valid @RequestBody CreateTaskRequest request) {
+        return taskService.createTask(request.getTitle(),  request.getDescription());
     }
 
     @GetMapping

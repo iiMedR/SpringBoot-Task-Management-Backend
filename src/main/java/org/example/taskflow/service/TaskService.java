@@ -14,8 +14,11 @@ public class TaskService {
     private final List<Task> tasks = new ArrayList<>();
     private long nextId = 1L;
 
-    public Task createTask(Task task) {
+    public Task createTask(String title, String description) {
+        Task task = new Task();
         task.setId(nextId);
+        task.setTitle(title);
+        task.setDescription(description);
         task.setCompleted(false);
 
         nextId++;
