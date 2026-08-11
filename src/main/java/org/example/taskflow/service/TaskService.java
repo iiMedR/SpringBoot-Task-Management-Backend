@@ -46,16 +46,12 @@ public class TaskService {
         tasks.remove(task);
     }
 
-    public Task updateTask(Long id, Task updatedTask) {
+    public Task updateTask(Long id, String title, String description, boolean completed) {
         Task existingTask = getTaskById(id);
 
-        if (updatedTask.getTitle() == null || updatedTask.getTitle().isBlank()) {
-            throw new IllegalArgumentException("Title is required");
-        }
-
-        existingTask.setTitle(updatedTask.getTitle());
-        existingTask.setDescription(updatedTask.getDescription());
-        existingTask.setCompleted(updatedTask.isCompleted());
+        existingTask.setTitle(title);
+        existingTask.setDescription(description);
+        existingTask.setCompleted(completed);
 
         return existingTask;
     }

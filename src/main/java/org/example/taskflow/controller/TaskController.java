@@ -2,6 +2,7 @@ package org.example.taskflow.controller;
 
 import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateTaskRequest;
+import org.example.taskflow.dto.UpdateTaskRequest;
 import org.example.taskflow.model.Task;
 import org.example.taskflow.service.TaskService;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,13 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody Task task) {
-        Task taskUpdated = taskService.updateTask(id, task);
+    public ResponseEntity<Task> updateTask(@PathVariable Long id,@Valid @RequestBody UpdateTaskRequest request) {
+        Task taskUpdated = taskService.updateTask(
+                id,
+                request.getTitle(),
+                request.getDescription(),
+                request.isCompleted()
+        );
         return ResponseEntity.ok(taskUpdated);
     }
 
