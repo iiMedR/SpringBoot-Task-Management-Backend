@@ -2,8 +2,8 @@ package org.example.taskflow.controller;
 
 import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateTaskRequest;
+import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.dto.UpdateTaskRequest;
-import org.example.taskflow.model.Task;
 import org.example.taskflow.service.TaskService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,22 +20,22 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@Valid @RequestBody CreateTaskRequest request) {
+    public TaskResponse createTask(@Valid @RequestBody CreateTaskRequest request) {
         return taskService.createTask(request.getTitle(),  request.getDescription());
     }
 
     @GetMapping
-    public List<Task> getAllTasks() { return taskService.getAllTasks(); }
+    public List<TaskResponse> getAllTasks() { return taskService.getAllTasks(); }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
-        Task task = taskService.getTaskById(id);
-        return ResponseEntity.ok(task);
+    public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
+
+        return ResponseEntity.ok(taskService.getTaskResponseById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id,@Valid @RequestBody UpdateTaskRequest request) {
-        Task taskUpdated = taskService.updateTask(
+    public ResponseEntity<TaskResponse> updateTask(@PathVariable Long id,@Valid @RequestBody UpdateTaskRequest request) {
+        TaskResponse taskUpdated = taskService.updateTask(
                 id,
                 request.getTitle(),
                 request.getDescription(),
@@ -45,9 +45,9 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/complete")
-    public ResponseEntity<Task> completeTask(@PathVariable Long id) {
-        Task taskCompleted = taskService.markCompleted(id);
-        return ResponseEntity.ok(taskCompleted);
+    public ResponseEntity<TaskResponse> completeTask(@PathVariable Long id) {
+
+        return ResponseEntity.ok(taskService.markCompleted(id));
     }
 
     @DeleteMapping("/{id}")
