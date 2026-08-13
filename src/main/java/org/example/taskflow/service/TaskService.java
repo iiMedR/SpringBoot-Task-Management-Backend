@@ -34,9 +34,15 @@ public class TaskService {
         return toResponse(savedTask);
     }
 
-    public List<TaskResponse> getAllTasks() {
-        return taskRepository.findAll()
-                .stream()
+    public List<TaskResponse> getAllTasks(Boolean completed) {
+        List<Task> tasks;
+        if (completed == null) {
+            tasks = taskRepository.findAll();
+        } else {
+            tasks = taskRepository.findByCompleted(completed);
+        }
+
+        return tasks.stream()
                 .map(this::toResponse)
                 .toList();
     }
