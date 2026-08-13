@@ -34,12 +34,21 @@ public class TaskService {
         return toResponse(savedTask);
     }
 
-    public List<TaskResponse> getAllTasks(Boolean completed) {
+    public List<TaskResponse> getAllTasks(Boolean completed, String search) {
         List<Task> tasks;
-        if (completed == null) {
-            tasks = taskRepository.findAll();
-        } else {
+        boolean hasSearch = search != null && !search.isBlank();
+
+        if(completed != null && hasSearch) {
+            tasks = taskRepository.findByCompletedAndTitleContainingIgnoreCase(completed, search);
+        }
+        else if(completed != null) {
             tasks = taskRepository.findByCompleted(completed);
+        }
+        else if(hasSearch) {
+            tasks = taskRepository.findByTitleContainingIgnoreCase(search);
+        }
+        else {
+            tasks = taskRepository.findAll();
         }
 
         return tasks.stream()

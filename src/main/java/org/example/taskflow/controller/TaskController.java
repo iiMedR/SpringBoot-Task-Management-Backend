@@ -25,7 +25,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskResponse> getAllTasks(@RequestParam(required = false) Boolean completed) { return taskService.getAllTasks(completed); }
+    public List<TaskResponse> getAllTasks(@RequestParam(required = false) Boolean completed, @RequestParam(required = false) String search) { return taskService.getAllTasks(completed, search); }
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
