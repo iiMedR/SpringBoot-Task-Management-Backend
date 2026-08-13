@@ -4,10 +4,11 @@ import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.exception.TaskNotFoundException;
 import org.example.taskflow.model.Task;
 import org.example.taskflow.repository.TaskRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class TaskService {
@@ -34,26 +35,24 @@ public class TaskService {
         return toResponse(savedTask);
     }
 
-    public List<TaskResponse> getAllTasks(Boolean completed, String search) {
-        List<Task> tasks;
+    public Page<TaskResponse> getAllTasks(Boolean completed, String search, Pageable pageable) {
+        Page<Task> tasks;
         boolean hasSearch = search != null && !search.isBlank();
 
         if(completed != null && hasSearch) {
-            tasks = taskRepository.findByCompletedAndTitleContainingIgnoreCase(completed, search);
+            tasks = taskRepository.findByCompletedAndTitleContainingIgnoreCase(completed, search, pageable);
         }
         else if(completed != null) {
-            tasks = taskRepository.findByCompleted(completed);
+            tasks = taskRepository.findByCompleted(completed, pageable);
         }
         else if(hasSearch) {
-            tasks = taskRepository.findByTitleContainingIgnoreCase(search);
+            tasks = taskRepository.findByTitleContainingIgnoreCase(search, pageable);
         }
         else {
-            tasks = taskRepository.findAll();
+            tasks = taskRepository.findAll(pageable);
         }
 
-        return tasks.stream()
-                .map(this::toResponse)
-                .toList();
+        return tasks.map(this::toResponse);
     }
 
     public Task getTaskById(Long id) {

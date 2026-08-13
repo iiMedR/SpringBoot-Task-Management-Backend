@@ -5,6 +5,8 @@ import org.example.taskflow.dto.CreateTaskRequest;
 import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.dto.UpdateTaskRequest;
 import org.example.taskflow.service.TaskService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskResponse> getAllTasks(@RequestParam(required = false) Boolean completed, @RequestParam(required = false) String search) { return taskService.getAllTasks(completed, search); }
+    public Page<TaskResponse> getAllTasks(@RequestParam(required = false) Boolean completed, @RequestParam(required = false) String search, Pageable pageable) { return taskService.getAllTasks(completed, search, pageable); }
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
