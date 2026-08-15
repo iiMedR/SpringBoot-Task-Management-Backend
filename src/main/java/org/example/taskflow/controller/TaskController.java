@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateTaskRequest;
 import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.dto.UpdateTaskRequest;
+import org.example.taskflow.model.Task;
 import org.example.taskflow.service.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,5 +57,10 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTaskById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{taskId}/user/{userId}")
+    public Task assignUserToTask(@PathVariable Long taskId, @PathVariable Long userId) {
+        return taskService.assignTaskToUser(taskId, userId);
     }
 }
