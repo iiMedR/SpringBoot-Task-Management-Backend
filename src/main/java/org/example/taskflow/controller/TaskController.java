@@ -60,7 +60,7 @@ public class TaskController {
     }
 
     @PatchMapping("/{taskId}/user/{userId}")
-    public Task assignUserToTask(@PathVariable Long taskId, @PathVariable Long userId) {
-        return taskService.assignTaskToUser(taskId, userId);
+    public ResponseEntity<TaskResponse> assignUserToTask(@PathVariable Long taskId, @PathVariable Long userId) {
+        return ResponseEntity.ok(taskService.assignTaskToUser(taskId, userId));
     }
 }

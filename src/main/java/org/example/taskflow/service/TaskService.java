@@ -23,9 +23,11 @@ public class TaskService {
         this.userRepository = userRepository;
     }
 
-
     private TaskResponse toResponse(Task task) {
-        return new TaskResponse(task.getId(), task.getTitle(), task.getDescription(), task.isCompleted());
+        Long userId = task.getUser() != null
+                ? task.getUser().getId()
+                : null;
+        return new TaskResponse(task.getId(), task.getTitle(), task.getDescription(), task.isCompleted(), userId);
     }
 
     public TaskResponse createTask(String title, String description) {
@@ -93,12 +95,12 @@ public class TaskService {
         return toResponse(savedTask);
     }
 
-    public Task assignTaskToUser(Long taskId, Long userId) {
+    public TaskResponse assignTaskToUser(Long taskId, Long userId) {
         Task task = getTaskById(taskId);
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
         task.setUser(user);
         taskRepository.save(task);
-        return task;
+        return toResponse(task);
     }
 }

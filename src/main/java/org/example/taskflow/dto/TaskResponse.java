@@ -5,17 +5,20 @@ public class TaskResponse {
     private String title;
     private String description;
     private boolean completed;
+    private Long userId;
 
     public TaskResponse(
             Long id,
             String title,
             String description,
-            boolean completed
+            boolean completed,
+            Long userId
     ) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.completed = completed;
+        this.userId = userId;
     }
 
     public Long getId() {
@@ -32,5 +35,9 @@ public class TaskResponse {
 
     public boolean isCompleted() {
         return completed;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 }
