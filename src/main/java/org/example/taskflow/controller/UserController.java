@@ -41,4 +41,10 @@ public class UserController {
     public Page<TaskResponse> getTasksByUserId(@PathVariable Long userId, Pageable pageable) {
         return taskService.getTasksByUserId(userId, pageable);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

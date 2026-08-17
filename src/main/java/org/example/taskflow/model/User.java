@@ -15,7 +15,7 @@ public class User {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Task> tasks =  new ArrayList<>();
 
     public User() {}
