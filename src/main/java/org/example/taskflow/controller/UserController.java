@@ -2,9 +2,13 @@ package org.example.taskflow.controller;
 
 import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateUserRequest;
+import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.dto.UserResponse;
 import org.example.taskflow.model.User;
+import org.example.taskflow.service.TaskService;
 import org.example.taskflow.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,9 +18,11 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private final TaskService taskService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, TaskService taskService) {
         this.userService = userService;
+        this.taskService = taskService;
     }
 
     @PostMapping
@@ -29,5 +35,10 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @GetMapping("/{userId}/tasks")
+    public Page<TaskResponse> getTasksByUserId(@PathVariable Long userId, Pageable pageable) {
+        return taskService.getTasksByUserId(userId, pageable);
     }
 }

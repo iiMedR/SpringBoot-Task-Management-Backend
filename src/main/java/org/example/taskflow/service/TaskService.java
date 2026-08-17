@@ -103,4 +103,11 @@ public class TaskService {
         taskRepository.save(task);
         return toResponse(task);
     }
+
+    public Page<TaskResponse> getTasksByUserId(Long userId, Pageable pageable){
+        userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+
+        Page<Task> tasks = taskRepository.findByUserId(userId, pageable);
+        return tasks.map(this::toResponse);
+    }
 }

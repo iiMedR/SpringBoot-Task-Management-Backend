@@ -13,4 +13,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Page<Task> findByTitleContainingIgnoreCase(String search, Pageable pageable);
 
     Page<Task> findByCompletedAndTitleContainingIgnoreCase(boolean completed, String search, Pageable pageable);
+
+    Page<Task> findByUserId(Long userId, Pageable pageable);
 }
