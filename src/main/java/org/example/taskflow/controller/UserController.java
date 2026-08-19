@@ -27,7 +27,8 @@ public class UserController {
     public UserResponse createUser(@Valid @RequestBody CreateUserRequest user) {
         String email = user.getEmail();
         String name = user.getName();
-        return userService.createUser(name, email);
+        String password = user.getPassword();
+        return userService.createUser(name, email, password);
     }
 
     @GetMapping("/{id}")

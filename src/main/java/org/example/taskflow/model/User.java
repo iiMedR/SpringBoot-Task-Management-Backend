@@ -14,6 +14,7 @@ public class User {
 
     private String name;
     private String email;
+    private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Task> tasks =  new ArrayList<>();
@@ -50,5 +51,13 @@ public class User {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

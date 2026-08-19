@@ -12,6 +12,10 @@ public class CreateUserRequest {
     @NotBlank
     private String email;
 
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, max = 100, message = "Password must contain at least 8 letters")
+    private String password;
+
     public CreateUserRequest() {}
 
     public String getName() {
@@ -20,5 +24,9 @@ public class CreateUserRequest {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
