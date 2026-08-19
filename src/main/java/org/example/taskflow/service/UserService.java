@@ -1,6 +1,7 @@
 package org.example.taskflow.service;
 
 import org.example.taskflow.dto.UserResponse;
+import org.example.taskflow.exception.EmailAlreadyExistsException;
 import org.example.taskflow.exception.UserNotFoundException;
 import org.example.taskflow.model.User;
 import org.example.taskflow.repository.UserRepository;
@@ -24,6 +25,10 @@ public class UserService {
 
     public UserResponse createUser(String name, String email, String password) {
         User user = new User();
+
+        if (userRepository.existsByEmail(email)) {
+            throw new EmailAlreadyExistsException(email);
+        }
 
         user.setName(name);
         user.setEmail(email);
