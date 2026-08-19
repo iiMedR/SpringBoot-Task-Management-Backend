@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateUserRequest;
 import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.dto.UserResponse;
-import org.example.taskflow.model.User;
 import org.example.taskflow.service.TaskService;
 import org.example.taskflow.service.UserService;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")

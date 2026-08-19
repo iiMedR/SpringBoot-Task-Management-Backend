@@ -4,14 +4,11 @@ import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateTaskRequest;
 import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.dto.UpdateTaskRequest;
-import org.example.taskflow.model.Task;
 import org.example.taskflow.service.TaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/tasks")

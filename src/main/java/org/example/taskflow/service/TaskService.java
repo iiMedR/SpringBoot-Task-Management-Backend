@@ -10,6 +10,7 @@ import org.example.taskflow.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -76,6 +77,7 @@ public class TaskService {
         taskRepository.delete(task);
     }
 
+    @Transactional
     public TaskResponse updateTask(Long id, String title, String description, boolean completed) {
         Task existingTask = getTaskById(id);
 
@@ -83,9 +85,9 @@ public class TaskService {
         existingTask.setDescription(description);
         existingTask.setCompleted(completed);
 
-        Task savedTask = taskRepository.save(existingTask);
+        //Task savedTask = taskRepository.save(existingTask);
 
-        return toResponse(savedTask);
+        return toResponse(existingTask);
     }
 
     public TaskResponse markCompleted(Long id) {
