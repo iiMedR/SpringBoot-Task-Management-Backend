@@ -23,14 +23,6 @@ public class UserController {
         this.taskService = taskService;
     }
 
-    @PostMapping
-    public UserResponse createUser(@Valid @RequestBody CreateUserRequest user) {
-        String email = user.getEmail();
-        String name = user.getName();
-        String password = user.getPassword();
-        return userService.createUser(name, email, password);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getUserById(id));
