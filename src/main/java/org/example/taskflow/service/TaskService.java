@@ -48,24 +48,12 @@ public class TaskService {
     }
 
     public Page<TaskResponse> getAllTasks(Boolean completed, String search, Pageable pageable) {
-        Page<Task> tasks;
-        boolean hasSearch = search != null && !search.isBlank();
 
+        Page<Task> tasks;
         User currentUser = userService.getCurrentUser();
         Long userId = currentUser.getId();
 
-        if(completed != null && hasSearch) {
-            tasks = taskRepository.findByUserIdAndCompletedAndTitleContainingIgnoreCase(userId, completed, search, pageable);
-        }
-        else if(completed != null) {
-            tasks = taskRepository.findByUserIdAndCompleted(userId, completed, pageable);
-        }
-        else if(hasSearch) {
-            tasks = taskRepository.findByUserIdAndTitleContainingIgnoreCase(userId, search, pageable);
-        }
-        else {
-            tasks = taskRepository.findByUserId(userId, pageable);
-        }
+        tasks = taskRepository.searchTasks(userId, completed, search, pageable);
 
         return tasks.map(this::toResponse);
     }
