@@ -56,8 +56,8 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{taskId}/user/{userId}")
+    /*@PatchMapping("/{taskId}/user/{userId}")
     public ResponseEntity<TaskResponse> assignUserToTask(@PathVariable Long taskId, @PathVariable Long userId) {
         return ResponseEntity.ok(taskService.assignTaskToUser(taskId, userId));
-    }
+    }*/
 }

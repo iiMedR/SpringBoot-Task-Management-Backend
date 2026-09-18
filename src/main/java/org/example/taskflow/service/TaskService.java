@@ -18,10 +18,12 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository) {
+    public TaskService(TaskRepository taskRepository, UserRepository userRepository, UserService userService) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     private TaskResponse toResponse(Task task) {
@@ -32,11 +34,14 @@ public class TaskService {
     }
 
     public TaskResponse createTask(String title, String description) {
+        User currentUser = userService.getCurrentUser();
+
         Task task = new Task();
 
         task.setTitle(title);
         task.setDescription(description);
         task.setCompleted(false);
+        task.setUser(currentUser);
 
         Task savedTask = taskRepository.save(task);
         return toResponse(savedTask);
@@ -46,25 +51,27 @@ public class TaskService {
         Page<Task> tasks;
         boolean hasSearch = search != null && !search.isBlank();
 
+        User currentUser = userService.getCurrentUser();
+        Long userId = currentUser.getId();
+
         if(completed != null && hasSearch) {
-            tasks = taskRepository.findByCompletedAndTitleContainingIgnoreCase(completed, search, pageable);
+            tasks = taskRepository.findByUserIdAndCompletedAndTitleContainingIgnoreCase(userId, completed, search, pageable);
         }
         else if(completed != null) {
-            tasks = taskRepository.findByCompleted(completed, pageable);
+            tasks = taskRepository.findByUserIdAndCompleted(userId, completed, pageable);
         }
         else if(hasSearch) {
-            tasks = taskRepository.findByTitleContainingIgnoreCase(search, pageable);
+            tasks = taskRepository.findByUserIdAndTitleContainingIgnoreCase(userId, search, pageable);
         }
         else {
-            tasks = taskRepository.findAll(pageable);
+            tasks = taskRepository.findByUserId(userId, pageable);
         }
 
         return tasks.map(this::toResponse);
     }
 
     public Task getTaskById(Long id) {
-        return taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(id));
+        return getOwnedTask(id);
     }
 
     public TaskResponse getTaskResponseById(Long id){
@@ -90,26 +97,34 @@ public class TaskService {
         return toResponse(existingTask);
     }
 
+    @Transactional
     public TaskResponse markCompleted(Long id) {
         Task task = getTaskById(id);
         task.setCompleted(true);
-        Task savedTask = taskRepository.save(task);
-        return toResponse(savedTask);
+        return toResponse(task);
     }
 
-    public TaskResponse assignTaskToUser(Long taskId, Long userId) {
+   /*public TaskResponse assignTaskToUser(Long taskId, Long userId) {
         Task task = getTaskById(taskId);
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
         task.setUser(user);
         taskRepository.save(task);
         return toResponse(task);
-    }
+    }*/
 
     public Page<TaskResponse> getTasksByUserId(Long userId, Pageable pageable){
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
 
         Page<Task> tasks = taskRepository.findByUserId(userId, pageable);
         return tasks.map(this::toResponse);
+    }
+
+    private Task getOwnedTask(Long taskId) {
+        User currentUser = userService.getCurrentUser();
+
+        return taskRepository
+                .findByIdAndUserId(taskId, currentUser.getId())
+                .orElseThrow(() -> new TaskNotFoundException(taskId));
     }
 }

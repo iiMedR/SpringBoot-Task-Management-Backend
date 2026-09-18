@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateUserRequest;
 import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.dto.UserResponse;
+import org.example.taskflow.model.User;
 import org.example.taskflow.service.TaskService;
 import org.example.taskflow.service.UserService;
 import org.springframework.data.domain.Page;
@@ -23,9 +24,18 @@ public class UserController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getUserById() {
+
+        User user = userService.getCurrentUser();
+
+        UserResponse response = new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{userId}/tasks")
@@ -33,9 +43,10 @@ public class UserController {
         return taskService.getTasksByUserId(userId, pageable);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
-        userService.deleteUserById(id);
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteUserById() {
+        User user = userService.getCurrentUser();
+        userService.deleteUserById(user.getId());
         return ResponseEntity.noContent().build();
     }
 }
