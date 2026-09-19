@@ -77,7 +77,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public void demonstrateNPlusOne() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAllWithTasks();
         System.out.println("Users loaded");
 
         for(User user : users) {
