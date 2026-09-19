@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 public class TaskService {
@@ -114,5 +116,13 @@ public class TaskService {
         return taskRepository
                 .findByIdAndUserId(taskId, currentUser.getId())
                 .orElseThrow(() -> new TaskNotFoundException(taskId));
+    }
+
+    public List<TaskResponse> getTasksByUser(String email) {
+        return taskRepository
+                .findByEmail(email)
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 }

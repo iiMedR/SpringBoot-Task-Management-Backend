@@ -4,19 +4,25 @@ import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateTaskRequest;
 import org.example.taskflow.dto.TaskResponse;
 import org.example.taskflow.dto.UpdateTaskRequest;
+import org.example.taskflow.model.User;
 import org.example.taskflow.service.TaskService;
+import org.example.taskflow.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
     private final TaskService taskService;
+    private final UserService userService;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, UserService userService) {
         this.taskService = taskService;
+        this.userService = userService;
     }
 
     @PostMapping
@@ -60,4 +66,10 @@ public class TaskController {
     public ResponseEntity<TaskResponse> assignUserToTask(@PathVariable Long taskId, @PathVariable Long userId) {
         return ResponseEntity.ok(taskService.assignTaskToUser(taskId, userId));
     }*/
+
+    @GetMapping("/testt")
+    public List<TaskResponse> getAllTasksByEmail() {
+        User currentUser = userService.getCurrentUser();
+        return taskService.getTasksByUser(currentUser.getEmail());
+    }
 }
