@@ -10,6 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -70,5 +73,20 @@ public class UserService {
                                 "Authenticated user was not found"
                         )
                 );
+    }
+
+    @Transactional(readOnly = true)
+    public void demonstrateNPlusOne() {
+        List<User> users = userRepository.findAll();
+        System.out.println("Users loaded");
+
+        for(User user : users) {
+            System.out.println(
+                    user.getEmail()
+                    + " has"
+                    + user.getTasks().size()
+                    + " tasks"
+            );
+        }
     }
 }

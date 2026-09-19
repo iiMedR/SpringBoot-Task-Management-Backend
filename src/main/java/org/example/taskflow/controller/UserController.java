@@ -49,4 +49,10 @@ public class UserController {
         userService.deleteUserById(user.getId());
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/n-plus-one-test")
+        public ResponseEntity<Void> testNPlusOne() {
+        userService.demonstrateNPlusOne();
+        return ResponseEntity.ok().build();
+    }
 }
