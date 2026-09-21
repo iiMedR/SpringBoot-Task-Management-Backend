@@ -1,6 +1,7 @@
 package org.example.taskflow.repository;
 
 import org.example.taskflow.model.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,10 +13,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
+    @EntityGraph(attributePaths = "tasks")
     @Query("""
-        select distinct u
+        select u
         from User u
-        Left join fetch u.tasks
     """)
     List<User> findAllWithTasks();
 }
