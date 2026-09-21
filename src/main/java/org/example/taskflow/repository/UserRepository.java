@@ -12,11 +12,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     Optional<User> findByEmail(String email);
-
-    @EntityGraph(attributePaths = "tasks")
-    @Query("""
-        select u
-        from User u
-    """)
-    List<User> findAllWithTasks();
 }

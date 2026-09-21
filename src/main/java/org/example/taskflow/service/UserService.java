@@ -74,19 +74,4 @@ public class UserService {
                         )
                 );
     }
-
-    @Transactional(readOnly = true)
-    public void demonstrateNPlusOne() {
-        List<User> users = userRepository.findAllWithTasks();
-        System.out.println("Users loaded");
-
-        for(User user : users) {
-            System.out.println(
-                    user.getEmail()
-                    + " has"
-                    + user.getTasks().size()
-                    + " tasks"
-            );
-        }
-    }
 }
