@@ -132,4 +132,56 @@ public class TaskServiceTest {
         assertFalse(capturedTask.isCompleted());
         assertEquals(1L, capturedTask.getUser().getId());
     }
+
+    @Test
+    void shouldDeleteTaskWhenTaskBelongsToCurrentUser(){
+        //Arrange
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@test123.com");
+
+        Task task = new Task();
+        task.setId(10L);
+        task.setTitle("Learn Mockito");
+        task.setUser(user);
+
+        when(userService.getCurrentUser())
+                .thenReturn(user);
+
+        when(taskRepository.findByIdAndUserId(10L, 1L))
+                .thenReturn(Optional.of(task));
+        //Act
+        taskService.deleteTaskById(10L);
+
+        //Assert
+        verify(taskRepository).delete(task);
+    }
+
+    @Test
+    void shouldMarkTaskAsCompleted() {
+        // Arrange
+        User user = new User();
+        user.setId(1L);
+        user.setEmail("test@test.ss");
+
+        Task task = new Task();
+        task.setId(10L);
+        task.setTitle("Learn Mockito");
+        task.setDescription("Practice unit Test");
+        task.setCompleted(false);
+        task.setUser(user);
+
+        when(userService.getCurrentUser())
+                .thenReturn(user);
+
+        when(taskRepository.findByIdAndUserId(10L, 1L))
+                .thenReturn(Optional.of(task));
+
+        // act
+        TaskResponse taskResponse = taskService.markCompleted(10L);
+
+        // Assert
+        assertTrue(taskResponse.isCompleted());
+        assertTrue(task.isCompleted());
+    }
 }
