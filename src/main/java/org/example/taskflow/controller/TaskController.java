@@ -1,5 +1,8 @@
 package org.example.taskflow.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.example.taskflow.dto.CreateTaskRequest;
 import org.example.taskflow.dto.TaskResponse;
@@ -25,6 +28,16 @@ public class TaskController {
         this.userService = userService;
     }
 
+    @Operation(
+            summary = "Create a task",
+            description = "Create a task for the currently authenticated user"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Task Created"
+            )
+})
     @PostMapping
     public TaskResponse createTask(@Valid @RequestBody CreateTaskRequest request) {
         return taskService.createTask(request.getTitle(),  request.getDescription());
@@ -33,6 +46,24 @@ public class TaskController {
     @GetMapping
     public Page<TaskResponse> getAllTasks(@RequestParam(required = false) Boolean completed, @RequestParam(required = false) String search, Pageable pageable) { return taskService.getAllTasks(completed, search, pageable); }
 
+    @Operation(
+            summary = "Get task by id",
+            description = "Get task belonging to the user by id "
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Task found"
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Authentication required"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Task not found"
+            )
+    })
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponse> getTaskById(@PathVariable Long id) {
 

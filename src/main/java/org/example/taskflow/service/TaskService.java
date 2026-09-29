@@ -55,7 +55,7 @@ public class TaskService {
         User currentUser = userService.getCurrentUser();
         Long userId = currentUser.getId();
 
-        tasks = taskRepository.searchTasks(userId, completed, search, pageable);
+        tasks = taskRepository.searchTasks(userId, completed, search == null ? "" : search.trim(), pageable);
 
         return tasks.map(this::toResponse);
     }

@@ -38,6 +38,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authHeader =
                 request.getHeader("Authorization");
 
+
+        System.out.println("========== JWT FILTER ==========");
+        System.out.println("URI: " + request.getRequestURI());
+        System.out.println("Query: " + request.getQueryString());
+        System.out.println("Authorization exists: " + (authHeader != null));
+
         if (authHeader == null
                 || !authHeader.startsWith("Bearer ")) {
 
@@ -61,6 +67,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                 .loadUserByUsername(email);
 
                 if (jwtService.isTokenValid(token, userDetails)) {
+
+                    System.out.println("JWT VALID for: " + email);
 
                     UsernamePasswordAuthenticationToken authentication =
                             new UsernamePasswordAuthenticationToken(
