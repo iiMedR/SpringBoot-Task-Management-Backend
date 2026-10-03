@@ -2,7 +2,7 @@ package org.example.taskflow.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.validation.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import io.jsonwebtoken.Claims;
@@ -13,13 +13,14 @@ import java.util.Date;
 
 @Service
 public class JwtService {
-    private static final String SECRET = "taskflow-super-secret-key-that-must-be-long-enough-123456";
+    @Value("${jwt.secret}")
+    private String secret;
 
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(
-                SECRET.getBytes(StandardCharsets.UTF_8)
+                secret.getBytes(StandardCharsets.UTF_8)
         );
     }
 

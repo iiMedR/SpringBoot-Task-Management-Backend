@@ -18,7 +18,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("TaskFlow API")
                         .version("1.0")
-                        .description("REST API for managing users and tasks"))
+                        .description("TaskFlow REST API for managing users and tasks"))
                 .addSecurityItem(
                         new SecurityRequirement()
                                 .addList(securitySchemeName)
